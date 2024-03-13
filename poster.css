@@ -353,6 +353,3 @@ mjx-container,
 .MathJax_Preview:empty {
   display: none;
 }
-header>aside>img {
-    min-height: 7rem;
-}
