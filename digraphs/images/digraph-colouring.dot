@@ -1,0 +1,14 @@
+//dot
+digraph hgn{
+bgcolor="transparent"
+layout="neato"
+node [shape=circle, style=filled, fillcolor="white"]
+1 [pos="0,0", pin=true, fillcolor="#4477AA"]
+2 [pos="1,0", pin=true, fillcolor="#CCBB44"]
+3 [pos="0.5,0.7", pin=true, fillcolor="#EE6677"]
+4 [fillcolor="#CCBB44"]
+1 -> 2
+1 -> 4
+2 -> 3
+3 -> 1
+}

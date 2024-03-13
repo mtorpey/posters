@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Digraphs package for GAP</title>
+    <link rel="stylesheet" href="poster.css">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1">
+    <!-- Based on a poster template from https://github.com/cpitclaudel/academic-poster-template -->
+
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+    
+    <style type="text/css">
+      html { font-size: 1.15rem }
+    </style>
+  </head>
+
+  <body vocab="http://schema.org/" typeof="ScholarlyArticle">
+    <header role="banner">
+      <aside>
+        <img src="images/university-crest.svg" alt="University of St Andrews crest">
+      </aside>
+      <div>
+        <h1 property="headline">Digraphs package for GAP</h1>
+        <h2 property="alternativeHeadline">digraphs.github.io/Digraphs</h2>
+        <address>
+          <a property="author">Michael Young</a> and the other <cite>Digraphs</cite> authors
+          <br/>
+          School of Computer Science &amp;
+          School of Mathematics and Statistics
+          <br/>
+          University of St Andrews
+        </address>
+        <span class="publication-info">
+          <span property="publisher">Unpublished</span>,
+          <time pubdate property="datePublished" datetime="2020-09-08">September 8, 2020</time>
+        </span>
+      </div>
+      <aside>
+        <img src="images/cs-crest.svg" alt="School of Computer Science logo"></a>
+      </aside>
+    </header>
+
+    <main property="articleBody">
+      <article property="abstract">
+        <header><h3>Abstract</h3></header>
+
+        <p><cite>Digraphs</cite> is a package for the computational algebra system <cite><abbr>GAP</abbr></cite> that has been in development and use here in St&nbsp;Andrews since 2014.</p>
+
+        <p>It provides usable tools and algorithms for <i>directed graphs</i>, a concept that arises in many fields of Mathematics and Computer Science.</p>
+      </article>
+
+      <article>
+        <header><h3>What is a directed graph?</h3></header>
+
+        <p>A directed graph (or <dfn>digraph</dfn>) is a bunch of dots joined together with arrows:</p>
+
+        <figure>
+          <img src="images/digraph-example.svg" style="width: 70%" alt="TODO">
+
+          <figcaption>A digraph \(G\), with 5 vertices and 5 edges</figcaption>
+        </figure>
+
+        <p>The dots are called <dfn>vertices</dfn> and the arrows are called <dfn>edges</dfn>.</p>
+      </article>
+
+      <article>
+        <header><h3>Computing with digraphs</h3></header>
+
+        <p>There are many things we may want to know about a digraph, to do with:</p>
+        <ul>
+          <li>its edges</li>
+          <li>its size</li>
+          <li>its symmetries</li>
+          <li>which vertices can be accessed from which</li>
+          <li>the paths we can follow through it</li>
+        </ul>
+        <p>and many other features.</p>
+      </article>
+
+      <article>
+        <header><h3>Representing a digraph on a computer</h3></header>
+
+        <p>Digraphs can be stored in a computer's memory using the digraph's <i>out-neighbours</i> – that is, the vertices that can be reached from each vertex.  The out-neighbours of \(G\) are</p>
+
+        
+        <ul class="align-center">
+          <li>\(1 \to 4\)</li>
+          <li>\(2 \to 5\)</li>
+          <li>\(3 \to \)</li>
+          <li>\(4 \to 1\)</li>
+          <li>\(5 \to 4, 5\)</li>
+        </ul>
+        
+        <p>or more concisely: \[\big((4), (5), (), (1), (4, 5)\big)\]</p>
+      </article>
+
+      <article>
+        <header><h3>A session in <cite>Digraphs</cite></h3></header>
+
+        <p>We can load <cite><abbr>GAP</abbr></cite> and run some commands:</p>
+        <pre class="boxed"><code>gap> LoadPackage("digraphs");
+gap> gr := Digraph([[4], [5], [], [1], [4, 5]]);
+&lt;immutable digraph with 5 vertices, 5 edges&gt;
+gap> DigraphNrConnectedComponents(gr);
+2
+gap> DigraphGirth(gr);
+1
+gap> DigraphHasLoops(gr);
+true
+gap> DigraphLongestSimpleCircuit(gr);
+[ 1, 4 ]</code></pre>
+      </article>
+
+      <article>
+        <header><h3>Clique finding</h3></header>
+        <p>A common problem is to find <dfn>cliques</dfn> in a digraph: that is, a set of vertices that all have edges going to each other.  A digraph's <dfn>clique number</dfn> is the size of its largest clique.</p>
+
+        <p>In \(G\), one clique we can find is \(\{1, 4\}\), since vertices 1 and 4 have edges going to each other.  There is no larger clique, so \(G\)'s clique number is 2.
+      </article>
+        
+      <article>
+        <header><h3>Graph colouring</h3></header>
+        <p>Another common problem is to <i>colour</i> all the vertices so that no two vertices connected by an edge share the same colour.  We like to use the smallest possible number of colours, and this number is called the <dfn>chromatic number</dfn>.</p>
+
+        <figure>
+          <img src="images/digraph-colouring.svg" style="width: 70%" alt="TODO">
+
+          <figcaption>A digraph \(H\) with chromatic number 3</figcaption>
+        </figure>
+      </article>
+        
+      <article>
+        <header><h3>Finding symmetries</h3></header>
+        <p>Many computational digraph problems are easier to solve if we know something about the <i>symmetries</i> of the digraph.  A symmetry (or <dfn>automorphism</dfn>) of a digraph is a way of swapping its vertices around so that it still has edges in the same places.</p>
+
+        <figure>
+          <img src="images/digraph-symmetries.svg" style="width: 70%" alt="TODO">
+
+          <figcaption>A digraph \(J\) with many symmetries</figcaption>
+        </figure>
+
+        <p>In \(J\), we can swap vertices 2 and 3 without changing the shape of the digraph.  Similarly we can swap 1 with 4, so long as we also move 2, 3, 5 and 6 appropriately.</p>
+
+        <p>All a digraph's automorphisms form a <i>group</i>, and once we have calculated it we can use group theory to learn more about the digraph.</p>
+      </article>
+
+      <article>
+        <header><h3>Applications</h3></header>
+
+        <p>Digraphs have countless real-world applications, ranging from mathematics to physical sciences, social sciences and humanities.</p>
+
+        <p>For example, the members of a social network form the vertices of a digraph, with edges representing interactions.  Neurons and connections in a brain similarly form a digraph, with paths representing information being processed.</p>
+
+        <p>Navigating a network is also a digraph problem.  One of the earliest graph theory problems is the <dfn>Seven Bridges of Königsberg</dfn>, which linked land masses in the Pregel River in the 18th century.  Euler proved that it was impossible to cross all seven bridges just once each on a single walk.</p>
+
+        <figure>
+          <img src="images/7-bridges.svg" style="width: 70%" alt="TODO">
+
+          <figcaption>The <dfn>Seven Bridges of Königsberg</dfn>.</figcaption>
+        </figure>
+
+        <p>Nowadays, digraph theory is used to find routes in real-world map software.  A famous area of study is the unsolved <dfn>Travelling Salesman Problem</dfn>: how can you visit every city in a road network while travelling the shortest possible distance?  A prize of $1 million has been offered for a fast algorithmic solution.</p>
+      </article>
+        
+      <article>
+        <header><h3>Contributing</h3></header>
+
+        <p><cite>Digraphs</cite> is open source and all development is done openly at <a href="https://github.com/digraphs/Digraphs">https://github.com/digraphs/Digraphs</a>.</p>
+
+        <p>We welcome suggestions, bug reports and pull requests.</p>
+      </article>
+
+      <!--
+      <article>
+        <header><h3>Figures</h3></header>
+
+        <p>Use the following code to insert a figure:</p>
+
+        <hr/>
+
+        <figure>
+          <img src="https://www.w3.org/html/logo/downloads/HTML5_Logo.svg" width="197" height="64" alt="An orange shield with a white 5 emblazoned on it and the letters HTML above it.">
+
+          <figcaption>The HTML5 logo (<i>Source: <a href="https://www.w3.org/html/logo/">W3C</a></i>)</figcaption>
+        </figure>
+      </article>
+
+      <article>
+        <header><h3>Mathematics</h3></header>
+
+        <p>This poster template loads <a href="https://www.mathjax.org/">MathJax</a> by default, so you can include inline math in backslash-parentheses <code>\( … \)</code> and display math in backslash-brackets <code>\[ … \]</code>:</p>
+
+        <p class="center">\((\lambda x. e) v \downarrow e[x/v]\) (β-reduction)</p>
+
+        \[\frac
+        {\langle \mathtt{expr}, s\rangle \Downarrow v}
+        {\langle \mathtt{var := expr}, s\rangle \downarrow s\left[\mathtt{var} \leftarrow v\right]}
+        \small{\text{Assign}}\]
+
+        <p>Using MathJax allows users of assistive technology to browse the equations.</p>
+      </article>
+
+      <article>
+        <header><h3>Additional styling</h3></header>
+
+        <p>The template's stylesheet defines a few extra CSS classes:</p>
+
+        <p class="boxed center"><code>.center</code><br/>
+          (horizontally centered text)</p>
+
+        <p class="boxed justify-center"><code>.justify-center</code><br/>
+          (horizontally centered block)</p>
+
+        <div class="boxed center">
+          <div class="center columns" style="height: 3em">
+            <p>hello</p>
+            <p>world</p>
+            <p>hello</p>
+          </div>
+          <span>(columns)</span>
+        </div>
+
+        <small>To customize column widths, use <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns"><code>grid-template-columns</code></a>; for example, for 40%/60% widths, use the following snippet:
+          <pre class="center">style="grid-template-columns: 40fr 60fr"</pre>
+        </small>
+      </article>
+
+      <figure style="flex-grow: 9999999">
+        <img style="width: 70%" src="logo.svg" alt="Project logo" />
+        <figcaption>A stand-alone figure to fill the remaining space.</figcaption>
+      </figure>
+      -->
+    </main>
+    <!--
+
+    <footer>
+      <address class="monospace">  <a href="https://github.com/cpitclaudel/academic-poster-template">https://github.com/cpitclaudel/academic-poster-template</a>
+      </address>
+      <address class="monospace">  clement.pitclaudel@live.com
+      </address>
+      <span class="credits">
+        Based on an <a href="https://github.com/cpitclaudel/academic-poster-template">open poster template</a>.
+      </span>
+    </footer>
+    -->
+  </body>
+</html>
